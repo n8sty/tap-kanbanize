@@ -1,0 +1,112 @@
+{
+  "properties": {
+    "taskid": {
+      "type": "number"
+    },
+    "position": {
+      "type": "number"
+    },
+    "type": {
+      "type": "string"
+    },
+    "assignee": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "subtasks": {
+      "type": "number"
+    },
+    "subtaskscomplete": {
+      "type": "number"
+    },
+    "color": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string"
+    },
+    "deadline": {
+      "type": "string"
+    },
+    "deadlineoriginalformat": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "extlink": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "string"
+    },
+    "columnid": {
+      "type": "string"
+    },
+    "laneid": {
+      "type": "string"
+    },
+    "leadtime": {
+      "type": "number"
+    },
+    "blocked": {
+      "type": "number"
+    },
+    "blockedreason": {
+      "type": "string"
+    },
+    "subtaskdetails": {
+      "type": "object"
+    },
+    "columnname": {
+      "type": "string"
+    },
+    "lanename": {
+      "type": "string"
+    },
+    "subscribers": {
+      "type": "array"
+    },
+    "attachments": {
+      "type": "object"
+    },
+    "logedtime": {
+      "type": "number"
+    },
+    "boardparent": {
+      "type": "number"
+    },
+    "archivedat": {
+      "type": "string"
+    },
+    "reporter": {
+      "type": "string"
+    },
+    "createdat": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "workflow": {
+      "type": "boolean"
+    },
+    "columnpath": {
+      "type": "string"
+    },
+    "linkes": {
+      "type": "object"
+    },
+    "customfields": {
+      "type": "array"
+    },
+    "updatedat": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

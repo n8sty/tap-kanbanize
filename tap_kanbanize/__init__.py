@@ -9,8 +9,22 @@ from .context import Context
 from . import schemas
 
 _ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
-
+ROOT = os.path.dirname(os.path.realpath(__file__))
 REQUIRED_CONFIG_KEYS = ['api_key', 'subdomain']
+
+TASK = 'tasks'
+TASK_ID = 'taskid'
+
+FILE_PATH = 'fp'
+PRIMARY_KEY = 'pk'
+
+SCHEMAS = {
+    TASK: {
+        FILE_PATH: 'schemas/task.json',
+        PRIMARY_KEY: TASK_ID
+    },
+}
+
 LOGGER = singer.get_logger()
 
 
@@ -19,17 +33,18 @@ def check_credentials_are_authorized(ctx):
 
 
 def discover(ctx):
-    check_credentials_are_authorized(ctx)
+    # check_credentials_are_authorized(ctx)
     catalog = Catalog([])
-    for tap_stream_id in schemas.stream_ids:
-        schema = Schema.from_dict(schemas.load_schema(tap_stream_id),
-                                  inclusion="automatic")
-        catalog.streams.append(CatalogEntry(
-            stream=tap_stream_id,
-            tap_stream_id=tap_stream_id,
-            key_properties=schemas.PK_FIELDS[tap_stream_id],
-            schema=schema,
-        ))
+    for tap_stream_id, params in SCHEMAS.items():
+        with open(os.path.join(ROOT, params[FILE_PATH]), 'r') as f:
+            schema = Schema.from_dict(json.load(f),
+                                      inclusion='automatic')
+            catalog.streams.append(CatalogEntry(
+                stream=tap_stream_id,
+                tap_stream_id=tap_stream_id,
+                key_properties=params[PRIMARY_KEY],
+                schema=schema
+            ))
     return catalog
 
 
@@ -45,7 +60,7 @@ def main():
     ctx = Context(args.config, args.state)
     if args.discover:
         discover(ctx).dump()
-        print()
+        print()  # TODO: What does this print statement do?
     else:
         ctx.catalog = Catalog.from_dict(args.properties) \
             if args.properties else discover(ctx)
