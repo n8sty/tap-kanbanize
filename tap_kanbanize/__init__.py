@@ -6,7 +6,6 @@ from singer import utils
 from singer.catalog import Catalog, CatalogEntry, Schema
 from . import streams as streams_
 from .context import Context
-from . import schemas
 
 _ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
 ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -51,7 +50,10 @@ def discover(ctx):
 
 def sync(ctx):
     for tap_stream_id in ctx.selected_stream_ids:
-        schemas.load_and_write_schema(tap_stream_id)
+        schema = load_schema(tap_stream_id)
+        singer.write_schema(stream_name=tap_stream_id,
+                            schema=schema,
+                            key_properties=SCHEMAS[tap_stream_id][PRIMARY_KEY])
     streams_.sync_lists(ctx)
     ctx.write_state()
 
