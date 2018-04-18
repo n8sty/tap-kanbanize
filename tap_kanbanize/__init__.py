@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import os
 import json
+
 import singer
 from singer import utils
 from singer.catalog import Catalog, CatalogEntry, Schema
-from . import streams as streams_
 from .context import Context
 
 _ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
@@ -33,6 +33,16 @@ def load_schema(tap_stream_id, inclusion='automatic'):
         schema = Schema.from_dict(json.load(f),
                                   inclusion=inclusion)
     return schema
+
+
+def metrics(tap_stream_id, records):
+    with singer.metrics.record_counter(tap_stream_id) as counter:
+        counter.increment(len(records))
+
+
+def write_records(tap_stream_id, records):
+    singer.write_records(tap_stream_id, records)
+    metrics(tap_stream_id, records)
 
 
 def discover(ctx):
