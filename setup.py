@@ -14,11 +14,11 @@ setup(
         "requests",
     ],
     entry_points="""
-    [console_scripts]
-    tap-kanbanize=tap_kanbanize:main
+        [console_scripts]
+        tap-kanbanize=tap_kanbanize:main
     """,
     packages=["tap_kanbanize"],
-    package_data = {
+    package_data={
         "schemas": ["tap_kanbanize/schemas/*.json"]
     },
     include_package_data=True,
