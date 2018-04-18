@@ -28,12 +28,7 @@ SCHEMAS = {
 LOGGER = singer.get_logger()
 
 
-def check_credentials_are_authorized(ctx):
-    pass
-
-
 def discover(ctx):
-    # check_credentials_are_authorized(ctx)
     catalog = Catalog([])
     for tap_stream_id, params in SCHEMAS.items():
         with open(os.path.join(ROOT, params[FILE_PATH]), 'r') as f:
