@@ -28,18 +28,24 @@ SCHEMAS = {
 LOGGER = singer.get_logger()
 
 
+def load_schema(tap_stream_id, inclusion='automatic'):
+    params = SCHEMAS[tap_stream_id]
+    with open(os.path.join(ROOT, params[FILE_PATH]), 'r') as f:
+        schema = Schema.from_dict(json.load(f),
+                                  inclusion=inclusion)
+    return schema
+
+
 def discover(ctx):
     catalog = Catalog([])
     for tap_stream_id, params in SCHEMAS.items():
-        with open(os.path.join(ROOT, params[FILE_PATH]), 'r') as f:
-            schema = Schema.from_dict(json.load(f),
-                                      inclusion='automatic')
-            catalog.streams.append(CatalogEntry(
-                stream=tap_stream_id,
-                tap_stream_id=tap_stream_id,
-                key_properties=params[PRIMARY_KEY],
-                schema=schema
-            ))
+        schema = load_schema(tap_stream_id)
+        catalog.streams.append(CatalogEntry(
+            stream=tap_stream_id,
+            tap_stream_id=tap_stream_id,
+            key_properties=params[PRIMARY_KEY],
+            schema=schema
+        ))
     return catalog
 
 
