@@ -8,7 +8,9 @@ from . import streams as streams_
 from .context import Context
 from . import schemas
 
-REQUIRED_CONFIG_KEYS = ["start_date", "username", "password"]
+_ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
+
+REQUIRED_CONFIG_KEYS = ['api_key', 'subdomain']
 LOGGER = singer.get_logger()
 
 
