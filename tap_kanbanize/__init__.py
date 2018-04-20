@@ -152,6 +152,9 @@ class Sync:
         schema = entry['schema']
         ts = singer.utils.now()
         with singer.metrics.record_counter(TASK) as counter:
+            singer.write_schema(TASK,
+                                schema,
+                                entry['key_properties'])
             for record in records:
                 record = singer.transform(record, schema)
                 singer.write_record(TASK,
