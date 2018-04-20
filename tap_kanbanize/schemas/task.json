@@ -311,7 +311,7 @@
           "value": {
             "type": [
               "null",
-              "number"
+              "string"
             ]
           },
           "mandatory": {
