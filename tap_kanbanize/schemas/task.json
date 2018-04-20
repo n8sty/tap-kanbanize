@@ -165,182 +165,176 @@
           }
         }
       }
-    }
-  },
-  "columnname": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "lanename": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "subscribers": {
-    "type": [
-      "null",
-      "array"
-    ],
-    "items": {
+    },
+    "columnname": {
       "type": [
         "null",
-        "number"
+        "string"
       ]
-    }
-  },
-  "attachments": {
-    "type": [
-      "null",
-      "object"
-    ]
-  },
-  "logedtime": {
-    "type": [
-      "null",
-      "number"
-    ]
-  },
-  "boardparent": {
-    "type": [
-      "null",
-      "number"
-    ]
-  },
-  "archivedat": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "reporter": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "createdat": {
-    "format": "date-time",
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "workflow": {
-    "type": [
-      "null",
-      "boolean"
-    ]
-  },
-  "columnpath": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "links": {
-    "type": [
-      "null",
-      "object"
-    ],
-    "additionalProperties": false,
-    "properties": {
-      "child": {
-        "type": [
-          "null",
-          "number"
-        ]
-      },
-      "mirror": {
-        "type": [
-          "null",
-          "number"
-        ]
-      },
-      "parent": {
-        "type": [
-          "null",
-          "number"
-        ]
-      },
-      "related": {
-        "type": [
-          "null",
-          "number"
-        ]
-      },
-      "predecessor": {
-        "type": [
-          "null",
-          "number"
-        ]
-      },
-      "successor": {
+    },
+    "lanename": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "subscribers": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
         "type": [
           "null",
           "number"
         ]
       }
-    }
-  },
-  "customfields": {
-    "type": [
-      "null",
-      "array"
-    ],
-    "items": {
+    },
+    "logedtime": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "boardparent": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "archivedat": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "reporter": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "createdat": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "workflow": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "columnpath": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "links": {
       "type": [
         "null",
         "object"
       ],
       "additionalProperties": false,
       "properties": {
-        "fieldid": {
+        "child": {
           "type": [
             "null",
             "number"
           ]
         },
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "type": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
+        "mirror": {
           "type": [
             "null",
             "number"
           ]
         },
-        "mandatory": {
+        "parent": {
           "type": [
             "null",
-            "boolean"
+            "number"
           ]
         },
-        "immutable": {
+        "related": {
+          "type": [
+            "null",
+            "number"
+          ]
+        },
+        "predecessor": {
+          "type": [
+            "null",
+            "number"
+          ]
+        },
+        "successor": {
           "type": [
             "null",
             "number"
           ]
         }
       }
+    },
+    "customfields": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "fieldid": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "value": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "mandatory": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "immutable": {
+            "type": [
+              "null",
+              "number"
+            ]
+          }
+        }
+      }
+    },
+    "updatedat": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
     }
-  },
-  "updatedat": {
-    "format": "date-time",
-    "type": [
-      "null",
-      "string"
-    ]
   }
 }
