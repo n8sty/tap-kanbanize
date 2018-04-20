@@ -13,6 +13,11 @@ setup(
         "singer-python>=5.0.12",
         "requests",
     ],
+    extras_require={
+        "dev": [
+            "nose>=1.3.7"
+        ]
+    },
     entry_points="""
         [console_scripts]
         tap-kanbanize=tap_kanbanize:main
