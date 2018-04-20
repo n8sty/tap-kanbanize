@@ -172,6 +172,7 @@ def discover():
 def main():
     args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
     if args.discover:
+        # TODO discovery mode works without requiring a valid config
         discover()
     else:
         catalog = args.properties if args.properties else get_catalog()
