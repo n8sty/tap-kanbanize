@@ -1,84 +1,110 @@
 #!/usr/bin/env python3
 import os
 import json
+import requests
 
 import singer
-from singer import utils
-from singer.catalog import Catalog, CatalogEntry, Schema
-from .context import Context
 
 _ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
+
 ROOT = os.path.dirname(os.path.realpath(__file__))
-REQUIRED_CONFIG_KEYS = ['api_key', 'subdomain']
+SCHEMA_ROOT = os.path.join(ROOT, 'schemas')
+
+API_KEY = 'apikey'
+BOARD_ID = 'board_id'
+SUBDOMAIN = 'subdomain'
+
+REQUIRED_CONFIG_KEYS = ['apikey', 'subdomain', 'boardid']
 
 TASK = 'tasks'
 TASK_ID = 'taskid'
 
-FILE_PATH = 'fp'
-PRIMARY_KEY = 'pk'
+_FILE = 'fp'
+_PRIMARY_KEY = 'pk'
 
 SCHEMAS = {
     TASK: {
-        FILE_PATH: 'schemas/task.json',
-        PRIMARY_KEY: TASK_ID
+        _FILE: 'task.json',
+        _PRIMARY_KEY: TASK_ID
     },
 }
 
 LOGGER = singer.get_logger()
 
+session = requests.Session()
 
-def load_schema(tap_stream_id, inclusion='automatic'):
+
+def load_schema(tap_stream_id):
     params = SCHEMAS[tap_stream_id]
-    with open(os.path.join(ROOT, params[FILE_PATH]), 'r') as f:
-        schema = Schema.from_dict(json.load(f),
-                                  inclusion=inclusion)
-    return schema
+    with open(os.path.join(SCHEMA_ROOT, params[_FILE]), 'r') as f:
+        return (json.load(f))
 
 
-def metrics(tap_stream_id, records):
-    with singer.metrics.record_counter(tap_stream_id) as counter:
-        counter.increment(len(records))
+def load_schemas():
+    return {ts_id: load_schema(ts_id) for ts_id in SCHEMAS.keys()}
 
 
-def write_records(tap_stream_id, records):
-    singer.write_records(tap_stream_id, records)
-    metrics(tap_stream_id, records)
+def write_metadata(metadata, values, breadcrumb):
+    metadata.append(
+        {
+            'metadata': values,
+            'breadcrumb': breadcrumb
+        }
+    )
 
 
-def discover(ctx):
-    catalog = Catalog([])
-    for tap_stream_id, params in SCHEMAS.items():
-        schema = load_schema(tap_stream_id)
-        catalog.streams.append(CatalogEntry(
-            stream=tap_stream_id,
-            tap_stream_id=tap_stream_id,
-            key_properties=params[PRIMARY_KEY],
-            schema=schema
-        ))
-    return catalog
-
-
-def sync(ctx):
-    for tap_stream_id in ctx.selected_stream_ids:
-        schema = load_schema(tap_stream_id)
-        singer.write_schema(stream_name=tap_stream_id,
-                            schema=schema,
-                            key_properties=SCHEMAS[tap_stream_id][PRIMARY_KEY])
-    streams_.sync_lists(ctx)
-    ctx.write_state()
-
-
-@utils.handle_top_exception(LOGGER)
-def main():
-    args = utils.parse_args(REQUIRED_CONFIG_KEYS)
-    ctx = Context(args.config, args.state)
-    if args.discover:
-        discover(ctx).dump()
-        print()  # TODO: What does this print statement do?
+def populate_metadata(schema, metadata, breadcrumb, key_properties):
+    if 'object' in schema['type']:
+        for prop_name, prop_schema in schema['properties'].items():
+            prop_breadcrumb = breadcrumb + ['properties', prop_name]
+            populate_metadata(
+                prop_schema,
+                metadata,
+                prop_breadcrumb,
+                key_properties)
     else:
-        ctx.catalog = Catalog.from_dict(args.properties) \
-            if args.properties else discover(ctx)
-        sync(ctx)
+        prop_name = breadcrumb[-1]
+        inclusion = 'automatic'
+        values = {'inclusion': inclusion}
+        write_metadata(metadata, values, breadcrumb)
+
+
+def get_catalog():
+    raw_schemas = load_schemas()
+    streams = []
+    for schema_name, schema in raw_schemas.items():
+        metadata = []
+        pk = SCHEMAS[schema_name][_PRIMARY_KEY]
+        populate_metadata(schema,
+                          metadata,
+                          breadcrumb=[],
+                          key_properties=pk)
+        catalog_entry = {
+            'stream': schema_name,
+            'tap_stream_id': schema_name,
+            'schema': schema,
+            'metadata': metadata,
+            'key_properties': pk,
+        }
+        streams.append(catalog_entry)
+
+    return {'streams': streams}
+
+
+def sync(config, state, catalog):
+    pass
+
+
+def discover():
+    catalog = get_catalog()
+    print(json.dumps(catalog, indent=2))
+
+
+@singer.utils.handle_top_exception(LOGGER)
+def main():
+    args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
+    if args.discover:
+        discover()
 
 
 if __name__ == "__main__":

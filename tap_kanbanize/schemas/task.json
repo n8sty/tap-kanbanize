@@ -1,112 +1,346 @@
 {
+  "type": [
+    "null",
+    "object"
+  ],
+  "additionalProperties": false,
   "properties": {
     "taskid": {
-      "type": "number"
+      "type": [
+        "null",
+        "number"
+      ]
     },
     "position": {
-      "type": "number"
+      "type": [
+        "null",
+        "number"
+      ]
     },
     "type": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "assignee": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "title": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "description": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "subtasks": {
-      "type": "number"
+      "type": [
+        "null",
+        "number"
+      ]
     },
     "subtaskscomplete": {
-      "type": "number"
+      "type": [
+        "null",
+        "number"
+      ]
     },
     "color": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "priority": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "size": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "deadline": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "deadlineoriginalformat": {
-      "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "extlink": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "tags": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "columnid": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "laneid": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "leadtime": {
-      "type": "number"
+      "type": [
+        "null",
+        "number"
+      ]
     },
     "blocked": {
-      "type": "number"
+      "type": [
+        "null",
+        "number"
+      ]
     },
     "blockedreason": {
-      "type": "string"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "subtaskdetails": {
-      "type": "object"
-    },
-    "columnname": {
-      "type": "string"
-    },
-    "lanename": {
-      "type": "string"
-    },
-    "subscribers": {
-      "type": "array"
-    },
-    "attachments": {
-      "type": "object"
-    },
-    "logedtime": {
-      "type": "number"
-    },
-    "boardparent": {
-      "type": "number"
-    },
-    "archivedat": {
-      "type": "string"
-    },
-    "reporter": {
-      "type": "string"
-    },
-    "createdat": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "workflow": {
-      "type": "boolean"
-    },
-    "columnpath": {
-      "type": "string"
-    },
-    "linkes": {
-      "type": "object"
-    },
-    "customfields": {
-      "type": "array"
-    },
-    "updatedat": {
-      "type": "string",
-      "format": "date-time"
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "subtaskid": {
+            "type": [
+              "null",
+              "number"
+            ]
+          },
+          "completiondate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "assignee": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
     }
+  },
+  "columnname": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "lanename": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "subscribers": {
+    "type": [
+      "null",
+      "array"
+    ],
+    "items": {
+      "type": [
+        "null",
+        "number"
+      ]
+    }
+  },
+  "attachments": {
+    "type": [
+      "null",
+      "object"
+    ]
+  },
+  "logedtime": {
+    "type": [
+      "null",
+      "number"
+    ]
+  },
+  "boardparent": {
+    "type": [
+      "null",
+      "number"
+    ]
+  },
+  "archivedat": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "reporter": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "createdat": {
+    "format": "date-time",
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "workflow": {
+    "type": [
+      "null",
+      "boolean"
+    ]
+  },
+  "columnpath": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "links": {
+    "type": [
+      "null",
+      "object"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "child": {
+        "type": [
+          "null",
+          "number"
+        ]
+      },
+      "mirror": {
+        "type": [
+          "null",
+          "number"
+        ]
+      },
+      "parent": {
+        "type": [
+          "null",
+          "number"
+        ]
+      },
+      "related": {
+        "type": [
+          "null",
+          "number"
+        ]
+      },
+      "predecessor": {
+        "type": [
+          "null",
+          "number"
+        ]
+      },
+      "successor": {
+        "type": [
+          "null",
+          "number"
+        ]
+      }
+    }
+  },
+  "customfields": {
+    "type": [
+      "null",
+      "array"
+    ],
+    "items": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fieldid": {
+          "type": [
+            "null",
+            "number"
+          ]
+        },
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "number"
+          ]
+        },
+        "mandatory": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
+        "immutable": {
+          "type": [
+            "null",
+            "number"
+          ]
+        }
+      }
+    }
+  },
+  "updatedat": {
+    "format": "date-time",
+    "type": [
+      "null",
+      "string"
+    ]
   }
 }
