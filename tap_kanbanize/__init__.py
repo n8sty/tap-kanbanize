@@ -99,19 +99,7 @@ class Sync:
         self.session.headers.update({API_KEY: self.api_key})
 
     def __call__(self):
-        streams = catalog['streams']
-        selected = [i for i in streams
-                    if i['stream'] in self.selected_streams()]
-        for catalog_entry in selected:
-            stream_id = selected['tap_stream_id']
-            schema = selected['schema']
-            singer.write_schema(
-                stream_id,
-                catalog_entry['schema'],
-                catalog_entry['key_properties']
-            )
-            fn = self.SYNC_FUNCTIONS[stream_id]
-            fn()
+        self.get_all_tasks()
 
     def get_selected_streams(self):
         '''
@@ -155,18 +143,19 @@ class Sync:
         endpoint += '/get_all_tasks'
         endpoint += '/boardid/{}'.format(self.boardid)
         endpoint += '/format/json'
-        with singer.metrics.http_request_timer('tasks') as timer:
+        with singer.metrics.http_request_timer(TASK) as timer:
             response = self.session.request(method='post', url=endpoint)
             status_code = response.status_code
             timer.tags[singer.metrics.Tag.http_status_code] = status_code
         records = response.json()
-        entry = self.get_catalog_entry('tasks')
-        schema = entry['schema']['properties']
+        entry = self.get_catalog_entry(TASK)
+        schema = entry['schema']
         ts = singer.utils.now()
-        with singer.metrics.record_counter('tasks') as counter:
+        with singer.metrics.record_counter(TASK) as counter:
             for record in records:
-                singer.write_record('tasks',
-                                    singer.transform(record, schema),
+                record = singer.transform(record, schema)
+                singer.write_record(TASK,
+                                    record,
                                     time_extracted=ts)
                 counter.increment()
 
@@ -183,7 +172,8 @@ def main():
         discover()
     else:
         catalog = args.properties if args.properties else get_catalog()
-        sync(args.config, args.state, catalog)
+        sync = Sync(args.config, args.state, catalog)
+        sync()
 
 
 if __name__ == "__main__":
