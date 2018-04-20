@@ -5,13 +5,11 @@ import requests
 
 import singer
 
-_ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
-
 ROOT = os.path.dirname(os.path.realpath(__file__))
 SCHEMA_ROOT = os.path.join(ROOT, 'schemas')
 
 API_KEY = 'apikey'
-BOARD_ID = 'board_id'
+BOARD_ID = 'boardid'
 SUBDOMAIN = 'subdomain'
 
 REQUIRED_CONFIG_KEYS = ['apikey', 'subdomain', 'boardid']
@@ -30,8 +28,6 @@ SCHEMAS = {
 }
 
 LOGGER = singer.get_logger()
-
-session = requests.Session()
 
 
 def load_schema(tap_stream_id):
@@ -91,8 +87,88 @@ def get_catalog():
     return {'streams': streams}
 
 
-def sync(config, state, catalog):
-    pass
+class Sync:
+
+    _ENDPOINT = 'https://{subdomain}.kanbanize.com/index.php/api/kanbanize/'
+
+    def __init__(self, config, state, catalog):
+        self.config = config
+        self.state = state
+        self.catalog = catalog
+        self.session = requests.Session()
+        self.session.headers.update({API_KEY: self.api_key})
+
+    def __call__(self):
+        streams = catalog['streams']
+        selected = [i for i in streams
+                    if i['stream'] in self.selected_streams()]
+        for catalog_entry in selected:
+            stream_id = selected['tap_stream_id']
+            schema = selected['schema']
+            singer.write_schema(
+                stream_id,
+                catalog_entry['schema'],
+                catalog_entry['key_properties']
+            )
+            fn = self.SYNC_FUNCTIONS[stream_id]
+            fn()
+
+    def get_selected_streams(self):
+        '''
+        Gets selected streams. Checks schema's that are 'selected'
+        first and then checks metadata, looking for an empty
+        breadcrumb and metadata with a 'selected' entry.
+        '''
+        selected_streams = []
+        for stream in self.catalog['streams']:
+            stream_metadata = stream['metadata']
+            if stream['schema'].get('selected', False):
+                selected_streams.append(stream['tap_stream_id'])
+            else:
+                for entry in stream_metadata:
+                    if not entry['breadcrumb'] and entry['metadata'].get(
+                            'selected', None):
+                        selected_streams.append(stream['tap_stream_id'])
+        return selected_streams
+
+    def _parse_config(self, k):
+        return self.config[k]
+
+    @property
+    def api_key(self):
+        return self._parse_config(API_KEY)
+
+    @property
+    def boardid(self):
+        return self._parse_config(BOARD_ID)
+
+    @property
+    def subdomain(self):
+        return self._parse_config(SUBDOMAIN)
+
+    def get_catalog_entry(self, tap_stream_id):
+        return [i for i in self.catalog['streams']
+                if i['tap_stream_id'] == tap_stream_id][0]
+
+    def get_all_tasks(self):
+        endpoint = self._ENDPOINT.format(subdomain=self.subdomain)
+        endpoint += '/get_all_tasks'
+        endpoint += '/boardid/{}'.format(self.boardid)
+        endpoint += '/format/json'
+        with singer.metrics.http_request_timer('tasks') as timer:
+            response = self.session.request(method='post', url=endpoint)
+            status_code = response.status_code
+            timer.tags[singer.metrics.Tag.http_status_code] = status_code
+        records = response.json()
+        entry = self.get_catalog_entry('tasks')
+        schema = entry['schema']['properties']
+        ts = singer.utils.now()
+        with singer.metrics.record_counter('tasks') as counter:
+            for record in records:
+                singer.write_record('tasks',
+                                    singer.transform(record, schema),
+                                    time_extracted=ts)
+                counter.increment()
 
 
 def discover():
@@ -105,6 +181,9 @@ def main():
     args = singer.utils.parse_args(REQUIRED_CONFIG_KEYS)
     if args.discover:
         discover()
+    else:
+        catalog = args.properties if args.properties else get_catalog()
+        sync(args.config, args.state, catalog)
 
 
 if __name__ == "__main__":
