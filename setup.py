@@ -5,8 +5,9 @@ setup(
     name="tap-kanbanize",
     version="0.1.1",
     description="Singer.io tap for extracting data",
-    author="Stitch",
-    url="http://singer.io",
+    author="Nate Giraldi",
+    author_email="ng269@cornell.edu",
+    url="https://github.com/n8sty/tap-kanbanize",
     classifiers=["Programming Language :: Python :: 3 :: Only"],
     py_modules=["tap_kanbanize"],
     install_requires=[
