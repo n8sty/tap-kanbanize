@@ -21,7 +21,7 @@ This tap:
     I suggest you use [`pipenv`](https://docs.pipenv.org/) for virtual environment generation and management.
     ```bash
     pipenv --three  # create a Python 3 virtualenv
-    pipenv install git+https://github.com/n8sty/tap-kanbanize@0.1.0#egg=tap-kanbanize  # make sure that the version specified is correct (ie: the latest)
+    pipenv install git+https://github.com/n8sty/tap-kanbanize@0.1.1#egg=tap-kanbanize  # make sure that the version specified is correct (ie: the latest)
     pipenv shell  # activate the virtualenv
     ```
 
