@@ -40,7 +40,7 @@ This tap:
     tap-kanbanize --discover --config config.json > properties.json
     ```
 
-5. Select the streams to sync by adding `"selected": true` to a schema definition. The below syncs the tasks stream:
+5. Select the streams to sync by adding `"selected": true` to a schema definition in the `properties.json` file created in the previous step. The below syncs the tasks stream:
 
     ```
     {
